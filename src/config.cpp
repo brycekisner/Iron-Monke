@@ -26,6 +26,7 @@ void SaveConfig()
     rapidjson::Document::AllocatorType& allocator = getConfig().config.GetAllocator();
 
     getConfig().config.AddMember("power", config.power, allocator);
+    getConfig().config.AddMember("hoverMode", config.hoverMode, allocator);
     getConfig().config.AddMember("enabled", config.enabled, allocator);
     getConfig().Write();
     INFO("Saved Configuration!");
@@ -38,6 +39,11 @@ bool LoadConfig()
     rapidjson::Document& doc = getConfig().config;
     if (doc.HasMember("power")) {
         config.power = doc["power"].GetInt();
+    } else {
+        foundEverything = false;
+    }
+    if(doc.HasMember("hoverMode") && doc["hoverMode"].IsBool()) {
+        config.hoverMode = doc["hoverMode"].GetBool();
     } else {
         foundEverything = false;
     }

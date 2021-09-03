@@ -5,7 +5,7 @@
 #include "beatsaber-hook/shared/utils/il2cpp-functions.hpp"
 #include "UnityEngine/Vector3.hpp"
 
-DEFINE_TYPE(IronMonke::IronMonkeWatchView);
+DEFINE_TYPE(IronMonke, IronMonkeWatchView);
 
 using namespace GorillaUI;
 using namespace UnityEngine;
@@ -21,7 +21,7 @@ namespace IronMonke
         settingSelector = new UISelectionHandler(EKeyboardKey::Up, EKeyboardKey::Down, EKeyboardKey::Enter, true, false);
         powerSelector = new UISelectionHandler(EKeyboardKey::Left, EKeyboardKey::Right, EKeyboardKey::Enter, false, true);
 
-        settingSelector->max = 2;
+        settingSelector->max = 3;
         powerSelector->max = 5;
 
         powerSelector->currentSelectionIndex = config.power;
@@ -35,7 +35,8 @@ namespace IronMonke
     }
 
     void IronMonkeWatchView::OnEnter(int index)
-    {
+    {   
+        if(index == 1) config.hoverMode ^= 1;
         if(index == 0) config.enabled ^= 1;
     }
 
@@ -58,11 +59,14 @@ namespace IronMonke
     {
         text += settingSelector->currentSelectionIndex == 0 ? "<color=#fd0000>></color>" : " ";
         text += config.enabled ? "<color=#00ff00>Enabled</color>" : "<color=#ff0000>Disabled</color>";
+        text += "\nHover Mode:\n";
+        text += settingSelector->currentSelectionIndex == 1 ? "<color=#fd0000>></color>" : " ";
+        text += config.hoverMode ? "<color=#00ff00>Enabled</color>" : "<color=#ff0000>Disabled</color>";
 
         text += "\n\n";
         text += "<b><i>Thrust:</i></b>\n";
-        text += settingSelector->currentSelectionIndex == 1 ? "<color=#ff0000><></color> " : " ";
-        text += "<color=#AADDAA><></color> ";
+        text += settingSelector->currentSelectionIndex == 2 ? "<color=#ff0000><></color> " : " ";
+        text += "<color=#AADDAA>></color> ";
         switch (powerSelector->currentSelectionIndex) {
             case 0:
                 text += "Default";
@@ -87,7 +91,7 @@ namespace IronMonke
         {
             text += "\n\nBut is disabled\ndue to not being in\na private room\n";
         }
-        text += "\nMade by Buzz Bzzz bzz BZZZ The 18th#0431";
+        text += "\nMade by Buzz Bzzz bzz BZZZ The 18th#0431\nBLM\nQueer/Trans Pride";
     }
 
     void IronMonkeWatchView::OnKeyPressed(int value)
@@ -100,6 +104,8 @@ namespace IronMonke
                 case 0:
                     break;
                 case 1:
+                    break;
+                case 2:
                     powerSelector->HandleKey(key);
                     break;
                 default:
